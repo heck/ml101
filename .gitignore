@@ -1,0 +1,8 @@
+examples/mnistdata/*
+.DS_Store
+._.DS_Store
+__pycache__/
+*.pyc
+.vscode/
+.ipynb_checkpoints/*
+*.egg-info

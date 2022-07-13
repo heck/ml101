@@ -1,0 +1,9 @@
+name: ml101
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - pip=21.2.2
+  - python=3.8.10
+  - pip:  # notice this uses pip's double equal ("==") syntax for specifying the version!
+    - numpy==1.23.1
