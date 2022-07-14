@@ -2,6 +2,7 @@ import pathlib
 
 import csv
 import numpy as np
+np.seterr(all='raise')
 
 from funcs import LeakyReLU, MSELoss
 from layer import Layer
