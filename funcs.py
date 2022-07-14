@@ -21,3 +21,23 @@ class MSELoss:
     def dloss(self, values, expected):
         """ the deriviative of the above function """
         return 2*(values - expected)/values.size
+
+# # a bonus activation function to play with!
+# class Sigmoid:
+#     def f(self, x):
+#         return 1/(1 + np.exp(-x))
+
+#     def df(self, x):
+#         return self.f(x) * (1 - self.f(x))
+
+# # a bounus loss function to play with!
+# class CrossEntropyLoss:
+#     """Cross entropy loss function following the pytorch docs."""
+#     def loss(self, values, target_class):
+#         return -values[target_class, 0] + np.log(np.sum(np.exp(values)))
+
+#     def dloss(self, values, target_class):
+#         d = np.exp(values)/np.sum(np.exp(values))
+#         _target_class = target_class.astype(int)
+#         d[_target_class, 0] -= 1
+#         return d

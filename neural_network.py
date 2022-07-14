@@ -13,7 +13,7 @@ class NeuralNetwork:
     def forward_pass(self, x):
         latest_output = x
         for layer in self._layers:
-            latest_output = layer.forward_pass(latest_output)
+            latest_output = layer.output(inputs=latest_output)
         return latest_output
 
     # def loss(self, values, expected):
@@ -26,7 +26,7 @@ class NeuralNetwork:
         latest_output = x
         for layer in self._layers:
             layer_inputs.append(latest_output)
-            latest_output = layer.forward_pass(latest_output)
+            latest_output = layer.output(inputs=latest_output)
 
         # step 2: compute the derivative of the loss (IOW, "rate of error") at the final (output) layer
         dErr_dOut = self._loss_function.dloss(latest_output, t)  # dloss is the derivative of the loss function
@@ -34,7 +34,7 @@ class NeuralNetwork:
         # step 3: propagate the error at each layer's output backwards through said layer ("backpropagation")
         #         IOW, "learn" by changing each layer's weights and biases by the amount of error each contributed
         for layer, layer_input in zip(self._layers[::-1], layer_inputs[::-1]):  # -1 is the "step" (IOW, go backwards through the layers and results)
-            y        = layer._W @ layer_input + layer._b  # compute the *pre-activation* output (y) for this layer
+            y        = layer.y(layer_input)      # compute the *pre-activation* output (y) for this layer
             dOut_dY  = layer.act_function.df(y)  # note: df() is derivative of the activation function
             dErr_dY  = dErr_dOut * dOut_dY
             # Math says: dErr_dW = dErr_dY * dY_dW 
