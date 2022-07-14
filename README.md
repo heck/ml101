@@ -13,5 +13,5 @@ $ conda activate ml101
 # Running
 
 ```bash
-$ python examples/mnist.py
+(ml101) $ python mnist.py
 ```

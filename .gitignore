@@ -1,4 +1,4 @@
-examples/mnistdata/*
+mnistdata/
 .DS_Store
 ._.DS_Store
 __pycache__/
