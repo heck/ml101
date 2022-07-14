@@ -4,7 +4,7 @@ sys.path.append(str(pathlib.Path(__file__).parent.parent))
 
 import csv
 import numpy as np
-from nn import NeuralNetwork, Layer, LeakyReLU, MSELoss
+from nn import NeuralNetwork, Layer, LeakyReLU, MSELoss, Sigmoid, CrossEntropyLoss
 
 TRAIN_FILE = pathlib.Path(__file__).parent / "mnistdata/mnist_train.csv"
 TEST_FILE = pathlib.Path(__file__).parent / "mnistdata/mnist_test.csv"
@@ -56,7 +56,6 @@ def train(net, train_data):
 
 
 if __name__ == "__main__":
-    # First configuration we tried.
     layers = [
         Layer(784, 16, LeakyReLU()),
         Layer(16, 16, LeakyReLU()),
@@ -64,7 +63,7 @@ if __name__ == "__main__":
     ]
     net = NeuralNetwork(layers, MSELoss(), 0.001)
 
-    # # Use a Sigmoid as the final layer (don't forget to import it!)
+    # # Use a Sigmoid as the final layer
     # layers = [
     #     Layer(784, 16, LeakyReLU()),
     #     Layer(16, 16, LeakyReLU()),
@@ -72,7 +71,7 @@ if __name__ == "__main__":
     # ]
     # net = NeuralNetwork(layers, MSELoss(), 0.001)
 
-    # # Use Sigmoid at the end and CrossEntropyLoss (import them!)
+    # # Use Sigmoid at the end and CrossEntropyLoss
     # layers = [
     #     Layer(784, 16, LeakyReLU()),
     #     Layer(16, 16, LeakyReLU()),
@@ -80,11 +79,11 @@ if __name__ == "__main__":
     # ]
     # net = NeuralNetwork(layers, CrossEntropyLoss(), 0.001)
 
-    # # Only LeakyReLU's and the CrossEntropyLoss (import the loss!)
+    # # Only LeakyReLU's and the CrossEntropyLoss
     # layers = [
     #     Layer(784, 16, LeakyReLU()),
     #     Layer(16, 16, LeakyReLU()),
-    #     Layer(16, 10, Sigmoid()),
+    #     Layer(16, 10, LeakyReLU()),
     # ]
     # net = NeuralNetwork(layers, CrossEntropyLoss(), 0.001)
 

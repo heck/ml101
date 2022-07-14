@@ -69,7 +69,8 @@ class CrossEntropyLoss(LossFunction):
 
     def dloss(self, values, target_class):
         d = np.exp(values)/np.sum(np.exp(values))
-        d[target_class, 0] -= 1
+        _target_class = target_class.astype(int)
+        d[_target_class, 0] -= 1
         return d
 
 
@@ -85,7 +86,8 @@ class Layer:
 
     def forward_pass(self, x):
         """Compute the next set of neuron states with the given set of states."""
-        return self.act_function.f(np.dot(self._W, x) + self._b)
+        y = self._W @ x + self._b
+        return self.act_function.f(y)
 
 
 class NeuralNetwork:
@@ -110,22 +112,26 @@ class NeuralNetwork:
         return self._loss_function.loss(values, expected)
 
     def train(self, x, t):
-        """Train the network on input x and expected output t."""
-
-        # Accumulate intermediate results during forward pass.
-        xs = [x]
+        """Train the network on input x and expected output t"""
+        layer_inputs = []
+        latest_values = x
         for layer in self._layers:
-            xs.append(layer.forward_pass(xs[-1]))
+            layer_inputs.append(latest_values)
+            latest_values = layer.forward_pass(latest_values)
 
-        dx = self._loss_function.dloss(xs.pop(), t)
-        for layer, x in zip(self._layers[::-1], xs[::-1]):
-            # Compute the derivatives
-            y = np.dot(layer._W, x) + layer._b
-            db = layer.act_function.df(y) * dx
-            dx = np.dot(layer._W.T, db)
-            dW = np.dot(db, x.T)
-            # Update parameters.
+        # initial dx = foward pass output - expected output
+        dx = self._loss_function.dloss(latest_values, t)  # dloss is the derivative of the loss function
+
+        for layer, layer_input in zip(self._layers[::-1], layer_inputs[::-1]):  # -1 is the "step" (IOW, go backwards through the layers and results)
+            # Compute changes to weights and biases due to learning (derivatives)
+            y  = layer._W @ layer_input + layer._b
+            db = layer.act_function.df(y) * dx  # note: df() is derivative of the activation function
+            dx = layer._W.T @ db
+            dW = db @ layer_input.T
+
+            # Update weights
             layer._W -= self.lr * dW
+            # Update biases
             layer._b -= self.lr * db
 
 
