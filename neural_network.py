@@ -35,10 +35,10 @@ class NeuralNetwork:
         #         IOW, "learn" by changing each layer's weights and biases by the amount of error each contributed
         for layer, layer_input in zip(self._layers[::-1], layer_inputs[::-1]):  # -1 is the "step" (IOW, go backwards through the layers and results)
             y        = layer.y(layer_input)      # compute the *pre-activation* output (y) for this layer
-            dOut_dY  = layer.act_function.df(y)  # note: df() is derivative of the activation function
+            dOut_dY  = layer.act_function.df(y)  # note: df() is the derivative of the activation function
             dErr_dY  = dErr_dOut * dOut_dY
             # Math says: dErr_dW = dErr_dY * dY_dW 
-            #       but: dY_dW   = layer_input
+            #       but: dY_dW   = layer_input (don't ask, it's math!)
             #        so: dErr_dW = dErr_dY * input
             dErr_dW  = dErr_dY @ layer_input.T
 
@@ -49,6 +49,6 @@ class NeuralNetwork:
             layer._W -= self._learning_rate * dErr_dW  # note: learning_rate is a scalar
             # Update biases
             # Math says: dErr_dB = dErr_dY * dY_dB
-            #       but: dY_dB   = 1
+            #       but: dY_dB   = 1 (see "don't ask" above)
             #        so: dErr_dB = dErr_dY
             layer._b -= self._learning_rate * dErr_dY  # note: learning_rate is a scalar
