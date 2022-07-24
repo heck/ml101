@@ -16,9 +16,6 @@ class NeuralNetwork:
             latest_output = layer.output(inputs=latest_output)
         return latest_output
 
-    # def loss(self, values, expected):
-    #     return self._loss_function.loss(values, expected)
-
     def train(self, x, t):
         """Train the network on input x and expected output t"""
         # step 1: do a forward pass using the given input data (x) but save the values inputed to each layer
