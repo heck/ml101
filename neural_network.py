@@ -25,6 +25,8 @@ class NeuralNetwork:
             layer_inputs.append(latest_output)
             latest_output = layer.output(inputs=latest_output)
 
+        # NOTE: all vars named dFoo_dBar represent "change in foo over change in bar" or dFoo/dBar
+
         # step 2: compute the derivative of the loss (IOW, "rate of error") at the final (output) layer
         dErr_dOut = self._loss_function.dloss(latest_output, t)  # dloss is the derivative of the loss function
 

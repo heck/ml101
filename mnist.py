@@ -78,7 +78,7 @@ def train(nn, train_data, validate_data):
         # print progress every 1,000 training samples
         if not i%1000 and i > 0:
             accuracy = test(nn, validate_data)
-            print(f"After training on {i} samples (out of {len(train_data)}) accuracy is {100*accuracy:.2f}%")
+            print(f"After training on {i} samples (out of {len(train_data)}) train set accuracy is {100*accuracy:.2f}%")
 
 
 if __name__ == "__main__":
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     test_data = load_data(TEST_FILE, delimiter=",", dtype=int)
     accuracy = test(nn, test_data)
-    print(f"Without training accuracy is {100*accuracy:.2f}%")     # Expected to be around 10%
+    print(f"Without training, test set accuracy is {100*accuracy:.2f}%")     # Expected to be around 10%
 
     print("---- BEFORE TRAINING ----")
     row = test_data[-1]
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     train(nn, train_data, validate_data=test_data)
 
     accuracy = test(nn, test_data)
-    print(f"Done trainining, final accuracy is {100*accuracy:.2f}%")
+    print(f"Done trainining, final test set accuracy is {100*accuracy:.2f}%")
 
     print("---- AFTER TRAINING ----")
     row = test_data[-1]
