@@ -27,7 +27,12 @@ class NeuralNetwork:
         for layer in self._layers:
             self._layer_inputs.append(latest_output)
             latest_output = layer.output(inputs=latest_output)
+        return latest_output
 
+    def decode(self, encodings, decoder_idx):
+        latest_output = encodings
+        for layer in self._layers[decoder_idx:]:
+            latest_output = layer.output(inputs=latest_output)
         return latest_output
 
     def train(self, x, t):

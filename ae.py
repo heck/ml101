@@ -123,6 +123,8 @@ def train(nn, train_data, validate_data):
             print(f"No improvement after batch {batch}. Stopping.")
             return
 
+def decode(nn, encoding):
+    return nn.decode(encoding, LATENT_OUPUT_LAYER)
 
 if __name__ == "__main__":
     test_data = load_data(TEST_FILE, delimiter=",", dtype=int)
