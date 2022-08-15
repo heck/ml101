@@ -11,6 +11,13 @@ from neural_network import NeuralNetwork
 TRAIN_FILE = f"{pathlib.Path(__file__).parent}/mnistdata/mnist_train.csv"
 TEST_FILE = f"{pathlib.Path(__file__).parent}/mnistdata/mnist_test.csv"
 
+layers = [
+    Layer(784, 16, LeakyReLU()),
+    Layer(16, 16, LeakyReLU()),
+    Layer(16, 10, LeakyReLU()),
+]
+mnist_nn = NeuralNetwork(layers, MSELoss(), 0.001)
+
 
 def load_data(filepath, delimiter=",", dtype=float):
     """Load a numerical numpy array from a file."""
@@ -82,31 +89,24 @@ def train(nn, train_data, validate_data):
 
 
 if __name__ == "__main__":
-    layers = [
-        Layer(784, 16, LeakyReLU()),
-        Layer(16, 16, LeakyReLU()),
-        Layer(16, 10, LeakyReLU()),
-    ]
-    nn = NeuralNetwork(layers, MSELoss(), 0.001)
-
     test_data = load_data(TEST_FILE, delimiter=",", dtype=int)
-    accuracy = test(nn, test_data)
+    accuracy = test(mnist_nn, test_data)
     print(f"Without training, test set accuracy is {100*accuracy:.2f}%")     # Expected to be around 10%
 
     print("---- BEFORE TRAINING ----")
     row = test_data[-1]
     print_row(row)
-    print(f"SURVEY SAYS?: {test_row(nn, to_col(row[1:]))}")
+    print(f"SURVEY SAYS?: {test_row(mnist_nn, to_col(row[1:]))}")
     print("-------------------------")
 
     train_data = load_data(TRAIN_FILE, delimiter=",", dtype=int)
-    train(nn, train_data, validate_data=test_data)
+    train(mnist_nn, train_data, validate_data=test_data)
 
-    accuracy = test(nn, test_data)
+    accuracy = test(mnist_nn, test_data)
     print(f"Done trainining, final test set accuracy is {100*accuracy:.2f}%")
 
     print("---- AFTER TRAINING ----")
     row = test_data[-1]
     print_row(row)
-    print(f"SURVEY SAYS?: {test_row(nn, to_col(row[1:]))}")
+    print(f"SURVEY SAYS?: {test_row(mnist_nn, to_col(row[1:]))}")
     print("-------------------------")
