@@ -85,7 +85,7 @@ def train(nn, train_data, validate_data):
         # print progress every 1,000 training samples
         if not i%1000 and i > 0:
             accuracy = test(nn, validate_data)
-            print(f"After training on {i} samples (out of {len(train_data)}) train set accuracy is {100*accuracy:.2f}%")
+            print(f"After training on {i} samples (out of {len(train_data)}) test set accuracy is {100*accuracy:.2f}%")
 
 
 if __name__ == "__main__":

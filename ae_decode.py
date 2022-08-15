@@ -13,6 +13,7 @@ if __name__ == "__main__":
     # digit = test_data[idx][0]
 
     ae_nn = NeuralNetwork.load("ae.pkl")
+
     # encoding = [[x] for x in range(10)]
     # encoding[digit] = [10]
     # output = decode(ae_nn, encoding) * 255

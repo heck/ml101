@@ -10,7 +10,7 @@ class NeuralNetwork:
         # Check layer compatibility
         for (from_, to_) in zip(self._layers[:-1], self._layers[1:]):
             if from_.outs != to_.ins:
-                raise ValueError("Layers should have compatible shapes.")
+                raise ValueError(f"Layers should have compatible shapes, these are not: from=[{from_.ins}, {from_.outs}] to=[{to_.ins}, {to_.outs}]")
 
     def save(self, filename):
         with open(filename, "wb") as f:

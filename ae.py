@@ -12,24 +12,24 @@ TRAIN_FILE = f"{pathlib.Path(__file__).parent}/mnistdata/mnist_train.csv"
 TEST_FILE = f"{pathlib.Path(__file__).parent}/mnistdata/mnist_test.csv"
 
 INPUTS = 784
-HIDDEN = 64
+HIDDENS = [128, 32]
 LATENT = 10
 
-encoder = [
-    Layer(INPUTS, HIDDEN, LeakyReLU()),
-    Layer(HIDDEN, HIDDEN, LeakyReLU()),
-    Layer(HIDDEN, LATENT, LeakyReLU()),
-]
+encoder = [Layer(INPUTS, HIDDENS[0], LeakyReLU())]
+encoder += [Layer(HIDDENS[x], HIDDENS[x+1], LeakyReLU()) for x in range(len(HIDDENS) - 1)]
+encoder += [Layer(HIDDENS[-1], LATENT, LeakyReLU())]
+
 LATENT_OUPUT_LAYER = len(encoder)
-decoder = [
-    Layer(LATENT, HIDDEN, LeakyReLU()),
-    Layer(HIDDEN, HIDDEN, LeakyReLU()),
-    Layer(HIDDEN, INPUTS, Sigmoid()),
-]
+
+decoder = [Layer(LATENT, HIDDENS[-1], LeakyReLU())]
+decoder += [Layer(HIDDENS[x], HIDDENS[x-1], LeakyReLU()) for x in range(len(HIDDENS) - 1, 0, -1)]
+decoder += Layer(HIDDENS[0], INPUTS, Sigmoid()),
+
 layers = encoder + decoder
 
 # ae_nn = NeuralNetwork(layers, MSELoss(), 0.001)
-ae_nn = NeuralNetwork(layers, MSELoss(), 0.1)
+# ae_nn = NeuralNetwork(layers, MSELoss(), 0.1)  # for HIDDENS=[64]
+ae_nn = NeuralNetwork(layers, MSELoss(), 0.333)
 
 def load_data(filepath, delimiter=",", dtype=float):
     """Load a numerical numpy array from a file."""
