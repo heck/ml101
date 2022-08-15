@@ -12,13 +12,12 @@ class NeuralNetwork:
             if from_.outs != to_.ins:
                 raise ValueError("Layers should have compatible shapes.")
 
-    @staticmethod
     def save(self, filename):
         with open(filename, "wb") as f:
             pickle.dump(self, f)
 
     @staticmethod
-    def load(self, filename):
+    def load(filename):
         with open(filename, "rb") as f:
             return pickle.load(f)
 

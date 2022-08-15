@@ -22,13 +22,12 @@ class MSELoss:
         """ the deriviative of the above function """
         return 2*(values - expected)/values.size
 
-# # a bonus activation function to play with!
-# class Sigmoid:
-#     def f(self, x):
-#         return 1/(1 + np.exp(-x))
+class Sigmoid:
+    def f(self, x):
+        return 1/(1 + np.exp(-x))
 
-#     def df(self, x):
-#         return self.f(x) * (1 - self.f(x))
+    def df(self, x):
+        return self.f(x) * (1 - self.f(x))
 
 # # a bounus loss function to play with!
 # class CrossEntropyLoss:
