@@ -4,7 +4,7 @@ import csv
 import numpy as np
 np.seterr(all='raise')
 
-from funcs import LeakyReLU, Sigmoid, MSELoss
+from funcs import LeakyReLU, Sigmoid, SoftMax, MSELoss
 from layer import Layer
 from neural_network import NeuralNetwork
 
@@ -17,7 +17,9 @@ LATENT = 10
 
 encoder = [Layer(INPUTS, HIDDENS[0], LeakyReLU())]
 encoder += [Layer(HIDDENS[x], HIDDENS[x+1], LeakyReLU()) for x in range(len(HIDDENS) - 1)]
-encoder += [Layer(HIDDENS[-1], LATENT, LeakyReLU())]
+# encoder += [Layer(HIDDENS[-1], LATENT, LeakyReLU())]
+encoder += [Layer(HIDDENS[-1], LATENT, Sigmoid())]
+# encoder += [Layer(HIDDENS[-1], LATENT, SoftMax())]
 
 LATENT_OUPUT_LAYER = len(encoder)
 
@@ -29,7 +31,8 @@ layers = encoder + decoder
 
 # ae_nn = NeuralNetwork(layers, MSELoss(), 0.001)
 # ae_nn = NeuralNetwork(layers, MSELoss(), 0.1)  # for HIDDENS=[64]
-ae_nn = NeuralNetwork(layers, MSELoss(), 0.333)
+# ae_nn = NeuralNetwork(layers, MSELoss(), 0.333)  # for HIDDENS=[128, 32] + LeakyReLU/Sigmoid
+ae_nn = NeuralNetwork(layers, MSELoss(), 1.0)  # for HIDDENS=[128, 32] + LeakyReLU/Sigmoid
 
 def load_data(filepath, delimiter=",", dtype=float):
     """Load a numerical numpy array from a file."""
@@ -101,17 +104,17 @@ def train(nn, train_data, validate_data):
 
     # now do the actual training
     loss_min = 1e10
-    for batch in range(1, 100):
+    # for batch in range(1, 100):
+    for batch in range(1, 100000):
         loss_min_batch = 1e10
         for i, train_row in enumerate(train_data):
             _, data = train_row[0], train_row[1:]
             data_col = to_col(data)
             nn.train(data_col, data_col)
 
-            # print progress every 1,000 training samples
-            if not i%1000 and i > 0:
+            if not i%2500 and i > 0:
                 loss_avg = test(nn, validate_data)
-                report_str = f"{batch:3}: After training on {i} samples (out of {len(train_data)}) avg test loss={loss_avg:.6f} (min={loss_min:.6f})"
+                report_str = f"Batch={batch:6,}  samples={i:,}(/{len(train_data):,}) avg test loss={loss_avg:.6f} (prev min={loss_min:.6f})"
                 loss_min = min(loss_min, loss_avg)
                 loss_min_batch = min(loss_min_batch, loss_avg)
                 if loss_min == loss_avg:
@@ -138,7 +141,7 @@ if __name__ == "__main__":
     print("-------------------------")
 
     train_data = load_data(TRAIN_FILE, delimiter=",", dtype=int)
-    train(ae_nn, train_data, test_data[:250])
+    train(ae_nn, train_data, test_data[:500])
 
     loss_avg = test(ae_nn, test_data)
     print(f"Done trainining, final average test set loss is {loss_avg:.6f}")

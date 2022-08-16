@@ -29,6 +29,13 @@ class Sigmoid:
     def df(self, x):
         return self.f(x) * (1 - self.f(x))
 
+class SoftMax:
+    def f(self, x):
+        return np.exp(x)/np.sum(np.exp(x))
+
+    def df(self, x):
+        return self.f(x) * (1 - self.f(x))
+
 # # a bounus loss function to play with!
 # class CrossEntropyLoss:
 #     """Cross entropy loss function following the pytorch docs."""
